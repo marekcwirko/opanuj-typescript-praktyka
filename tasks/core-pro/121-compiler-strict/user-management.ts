@@ -8,4 +8,10 @@ userModule.addUser({ id: 3, name: 'Jim' });
 
 userModule.removeUser(2);
 
-userModule.filterUsers((user) => user.name.startsWith('J'));
+// userModule.filterUsers((user) => user.name.startsWith('J'));
+
+userModule.filterUsers((user) => ({
+    isValid: user.name.startsWith('J'),
+    id: user.id,
+    name: user.name,
+  }));
