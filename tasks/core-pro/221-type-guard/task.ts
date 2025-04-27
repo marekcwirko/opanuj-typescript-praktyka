@@ -25,11 +25,32 @@ type SystemNotification = { type: '' };
 
 type Notification = EmailNotification | SMSNotification | SystemNotification;
 
+type KnownNotification = Notification & { type: Notification['type'] };
+
 // ❌ Ta funkcja wymaga poprawy:
-export function getNotificationText(notification: Notification): string {
-  if (notification.type === 'email') {
-    return notification.content;
+export function getNotificationText(notification: any): string {
+  if (typeof notification !== 'object' || !notification.type) {
+    return 'Unknown notification';
   }
 
-  return ' ';
+  switch (notification.type) {
+    case 'email':
+      if ('content' in notification) {
+        return notification.content;
+      }
+      break;
+    case 'sms':
+      if ('message' in notification) {
+        return notification.message;
+      }
+      break;
+    case 'system':
+      if ('log' in notification) {
+        return notification.log;
+      }
+      break;
+  }
+
+  return 'Unknown notification';
 }
+
